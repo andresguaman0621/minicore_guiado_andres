@@ -1,5 +1,5 @@
 Project Description
-The Task Manager is a web application built using Django and Python that allows users to efficiently manage their tasks. Users can create, update, delete, and organize tasks, making it easier to keep track of their responsibilities. This project aims to provide a user-friendly interface for task management, addressing the common challenges of organization and prioritization.
+  The Task Manager is a web application built using Django and Python that allows users to efficiently manage their tasks. Users can create, update, delete, and organize tasks, making it easier to keep track of their responsibilities. This project aims to provide a user-friendly interface for task management, addressing the common challenges of organization and prioritization.
 Motivation
 The motivation behind this project is to simplify task management for users who struggle with keeping track of their daily responsibilities. By providing an intuitive platform, we hope to enhance productivity and reduce stress.
 Problem Solved

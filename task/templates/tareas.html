@@ -1,132 +1,275 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} {% block body %}
+<style>
+  :root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --background-color: #ecf0f1;
+    --text-color: #34495e;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .btn-add-task {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 2rem;
+  }
+  .btn-add-task:hover {
+    background-color: #45a049;
+  }
+  .modal-content {
+    border-radius: 10px;
+  }
+  .modal-header {
+    background-color: #f8f9fa;
+    border-bottom: none;
+  }
+  .modal-footer {
+    border-top: none;
+  }
+  .input-group {
+    margin-bottom: 1rem;
+  }
+  .input-group-text {
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 5px 0 0 5px;
+  }
+  .form-control,
+  .form-select {
+    border-radius: 0 5px 5px 0;
+  }
+  .btn-secondary,
+  .btn-primary {
+    border-radius: 5px;
+    padding: 8px 16px;
+  }
+  .table-responsive {
+    overflow-x: auto;
+  }
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .table th,
+  .table td {
+    padding: 1rem;
+    text-align: left;
+    vertical-align: middle;
+    background-color: rgb(235, 233, 233);
+    color: rgb(76, 76, 76);
+  }
+  .table thead {
+    background-color: #343a40;
+    color: white;
+  }
+  .table tbody tr:nth-child(even) {
+    background-color: #2c3034;
+  }
+  .table tbody tr:hover {
+    background-color: #3e444a;
+  }
+  .badge {
+    font-size: 0.8rem;
+    padding: 0.4em 0.6em;
+    border-radius: 10px;
+  }
 
-{% block body %}
+  /* .bi::before,
+  [class*=" bi-"]::before,
+  [class^="bi-"]::before {
+    display: inline-block;
+    font-family: bootstrap-icons !important;
+    font-style: normal;
+    font-weight: 400 !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    vertical-align: -0.125em;
+    -webkit-font-smoothing: antialiased;
+    color: #5a9de5;
+    -moz-osx-font-smoothing: grayscale;
+  } */
+  .icon-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+  .icon-btn:hover {
+    color: #3a7bc8;
+    color: var(--accent-color);
+  }
+  @media (max-width: 768px) {
+    .table th,
+    .table td {
+      padding: 0.5rem;
+    }
+  }
+</style>
+
 <div class="container">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Agregar una nueva tarea
-    </button>
+  <button
+    type="button"
+    class="btn-add-task"
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModal"
+  >
+    Agregar una nueva tarea
+  </button>
 
-    <!-- Modal -->
-    <form action="" method="post">
-        {% csrf_token %}
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Ingresar tarea</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="input-group mb-3">
-                            <label class="input-group-text" for="inputGroupSelect01">Seleccionar Empleado</label>
-                            <select class="form-select" id="inputGroupSelect01" name="employee_id">
-                                <option selected>Seleccionar...</option>
-                                {% for employee in employee %}
-                                <option value="{{ employee.id }}">{{ employee.first_name }} {{ employee.last_name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <label class="input-group-text" for="inputGroupSelect01">Seleccionar Proyecto</label>
-                            <select class="form-select" id="inputGroupSelect01" name="project_id">
-                                <option selected>Seleccionar...</option>
-                                {% for project in project %}
-                                <option value="{{ project.id }}">{{ project.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Descripción de la tarea</span>
-                            <input type="text" aria-label="First name" class="form-control" name="description">
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Fecha de inicio</span>
-                            <input type="date" aria-label="First name" class="form-control" name="date_start">
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <span class="input-group-text">Tiempo estimado en días</span>
-                            <input type="number" aria-label="First name" class="form-control" name="estimate_time">
-                        </div>
-
-                        <div class="input-group mb-3">
-                            <label class="input-group-text" for="inputGroupSelect01">Seleccionar estatus</label>
-                            <select class="form-select" id="inputGroupSelect01" name="status">
-                                <option value="Pending">No empezado</option>
-                                <option value="In Progress">En progreso</option>
-                                <option value="Done">Completado</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Guardar Tarea</button>
-                    </div>
-                </div>
+  <!-- Modal -->
+  <form action="" method="post">
+    {% csrf_token %}
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Ingresar tarea
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="input-group">
+              <label class="input-group-text" for="employee_id"
+                >Seleccionar Empleado</label
+              >
+              <select class="form-select" id="employee_id" name="employee_id">
+                <option selected>Seleccionar...</option>
+                {% for employee in employee %}
+                <option value="{{ employee.id }}">
+                  {{ employee.first_name }} {{ employee.last_name }}
+                </option>
+                {% endfor %}
+              </select>
             </div>
-        </div>
-    </form>
 
+            <div class="input-group">
+              <label class="input-group-text" for="project_id"
+                >Seleccionar Proyecto</label
+              >
+              <select class="form-select" id="project_id" name="project_id">
+                <option selected>Seleccionar...</option>
+                {% for project in project %}
+                <option value="{{ project.id }}">{{ project.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text">Descripción de la tarea</span>
+              <input type="text" class="form-control" name="description" />
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text">Fecha de inicio</span>
+              <input type="date" class="form-control" name="date_start" />
+            </div>
+
+            <div class="input-group">
+              <span class="input-group-text">Tiempo estimado en días</span>
+              <input type="number" class="form-control" name="estimate_time" />
+            </div>
+
+            <div class="input-group">
+              <label class="input-group-text" for="status"
+                >Seleccionar estatus</label
+              >
+              <select class="form-select" id="status" name="status">
+                <option value="Pending">No empezado</option>
+                <option value="In Progress">En progreso</option>
+                <option value="Done">Completado</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button type="submit" class="btn btn-primary">Guardar Tarea</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="table-responsive">
     <table class="table table-dark">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Empleado encargado</th>
-                <th scope="col">Proyecto relacionado</th>
-                <th scope="col">Descripción del proyecto</th>
-                <th scope="col">Fecha de inicio</th>
-                <th scope="col">Tiempo estimado en horas</th>
-                <th scope="col">status</th>
-                <th scope="col">
-                    <div class="container text-center">
-                        Editar
-                    </div>
-                </th>
-                <th scope="col">
-                    <div class="container text-center">
-                        Eliminar
-                    </div>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for task in task %}
-            <tr>
-                <th scope="row">{{ task.id }}</th>
-                <td>{{ task.id_employee.first_name }} {{ task.id_employee.last_name }}</td>
-                <td>{{ task.id_project.name }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.date_start }}</td>
-                <td>{{ task.estimate_time }}</td>
-                <td>
-                    {% if task.status == 'Pending' %}
-                    <span class="badge bg-danger">No empezado</span>
-                    {% elif task.status == 'In Progress' %}
-                    <span class="badge bg-warning">En progreso</span>
-                    {% else %}
-                    <span class="badge bg-success">Completado</span>
-                    {% endif %}
-                </td>
-                <td>
-                    <div class="container text-center">
-                        <a href="{% url 'task_edit' task.id %}" style="color: white; text-decoration: none;">
-                            <i class="bi bi-pen-fill"></i>
-                        </a>
-                    </div>
-                </td>
-                <td>
-                    <div class="container text-center">
-                        <a href="{% url 'task_delete' task.id %}" style="color: white; text-decoration: none;">
-                            <i class="bi bi-trash3-fill"></i>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Empleado encargado</th>
+          <th scope="col">Proyecto relacionado</th>
+          <th scope="col">Descripción del proyecto</th>
+          <th scope="col">Fecha de inicio</th>
+          <th scope="col">Tiempo estimado en horas</th>
+          <th scope="col">status</th>
+          <th scope="col">Editar</th>
+          <th scope="col">Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in task %}
+        <tr>
+          <th scope="row">{{ task.id }}</th>
+          <td>
+            {{ task.id_employee.first_name }} {{ task.id_employee.last_name }}
+          </td>
+          <td>{{ task.id_project.name }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.date_start }}</td>
+          <td>{{ task.estimate_time }}</td>
+          <td>
+            {% if task.status == 'Pending' %}
+            <span class="badge bg-danger">No empezado</span>
+            {% elif task.status == 'In Progress' %}
+            <span class="badge bg-warning">En progreso</span>
+            {% else %}
+            <span class="badge bg-success">Completado</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'task_edit' task.id %}" class="icon-btn">
+              <i class="bi bi-pen-fill"></i>
+            </a>
+          </td>
+          <td>
+            <a href="{% url 'task_delete' task.id %}" class="icon-btn">
+              <i class="bi bi-trash3-fill"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
 </div>
 {% endblock %}

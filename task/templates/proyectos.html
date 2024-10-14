@@ -1,78 +1,222 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} {% block body %}
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .btn-add-project {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .btn-add-project:hover {
+    background-color: #3a7bc8;
+    transform: translateY(-2px);
+  }
+  .modal-content {
+    border-radius: 15px;
+    border: none;
+  }
+  .modal-header {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 15px 15px 0 0;
+    padding: 1.5rem;
+  }
+  .modal-title {
+    font-weight: bold;
+  }
+  .modal-body {
+    padding: 2rem;
+  }
+  .modal-footer {
+    border-top: none;
+    padding: 1.5rem;
+  }
+  .input-group {
+    margin-bottom: 1rem;
+  }
+  .input-group-text {
+    background-color: var(--secondary-color);
+    border: 1px solid #ced4da;
+    border-radius: 30px 0 0 30px;
+    padding: 0.75rem 1.5rem;
+  }
+  .form-control {
+    border-radius: 0 30px 30px 0;
+    padding: 0.75rem 1.5rem;
+  }
+  .btn-secondary,
+  .btn-primary {
+    border-radius: 30px;
+    padding: 10px 20px;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  .btn-secondary:hover,
+  .btn-primary:hover {
+    transform: translateY(-2px);
+  }
+  .table-responsive {
+    overflow-x: auto;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background-color: white;
+    color: var(--text-color);
+  }
+  .table th,
+  .table td {
+    padding: 1.5rem;
+    text-align: left;
+    vertical-align: middle;
+    background-color: rgb(235, 233, 233);
+    color: rgb(76, 76, 76);
+  }
+  .table thead {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  .table thead th:first-child {
+    border-top-left-radius: 15px;
+  }
+  .table thead th:last-child {
+    border-top-right-radius: 15px;
+  }
+  .table tbody tr:nth-child(even) {
+    background-color: var(--secondary-color);
+  }
+  .table tbody tr:hover {
+    background-color: #e8e8e8;
+  }
 
-{% block body %}
+  .icon-btn {
+    background: none;
+    border: none;
+    color: blue;
+    cursor: pointer;
+    transition: color 0.3s, transform 0.2s;
+    font-size: 1.2rem;
+  }
+
+  .icon-btn:hover {
+    transform: scale(1.1);
+    color: var(--accent-color);
+  }
+  .icon-btn.delete:hover {
+    color: var(--danger-color);
+  }
+  @media (max-width: 768px) {
+    .table th,
+    .table td {
+      padding: 1rem;
+    }
+    .btn-add-project {
+      width: 100%;
+    }
+  }
+</style>
 
 <div class="container">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Agregar un proyecto
-    </button>
+  <button
+    type="button"
+    class="btn-add-project"
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModal"
+  >
+    Agregar un proyecto
+  </button>
 
-    <!-- Modal -->
-    <form action="{% url 'project' %}" method="post">
-        {% csrf_token %}
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Ingresar Proyecto</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p>Ingrese un nuevo empleado: </p>
-                        <div class="input-group">
-                            <span class="input-group-text">Nombre del proyecto</span>
-                            <input type="text" aria-label="First name" class="form-control" name="name">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Agregar proyecto</button>
-                    </div>
-                </div>
+  <!-- Modal -->
+  <form action="{% url 'project' %}" method="post">
+    {% csrf_token %}
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Ingresar Proyecto
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <p>Ingrese un nuevo proyecto:</p>
+            <div class="input-group">
+              <span class="input-group-text">Nombre del proyecto</span>
+              <input type="text" class="form-control" name="name" required />
             </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Agregar proyecto
+            </button>
+          </div>
         </div>
-    </form>
+      </div>
+    </div>
+  </form>
 
-    <table class="table table-dark">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nombre del proyecto</th>
-                <th scope="col">
-                    <div class="container text-center">
-                        Editar
-                    </div>
-                </th>
-                <th scope="col">
-                    <div class="container text-center">
-                        Eliminar
-                    </div>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for project in project %}
-            <tr>
-                <th scope="row">{{ project.id }}</th>
-                <td>{{ project.name }}</td>
-                <td>
-                    <div class="container text-center">
-                        <a href="{% url 'project_edit' project.id %}" style="color: white; text-decoration: none;">
-                            <i class="bi bi-pen-fill"></i>
-                        </a>
-                    </div>
-                </td>
-                <td>
-                    <div class="container text-center">
-                        <a href="{% url 'project_delete' project.id %}" style="color: white; text-decoration: none;">
-                            <i class="bi bi-trash3-fill"></i>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombre del proyecto</th>
+          <th scope="col" class="text-center">Editar</th>
+          <th scope="col" class="text-center">Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for project in project %}
+        <tr>
+          <th scope="row">{{ project.id }}</th>
+          <td>{{ project.name }}</td>
+          <td class="text-center">
+            <a href="{% url 'project_edit' project.id %}" class="icon-btn">
+              <i class="bi bi-pen-fill"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <a
+              href="{% url 'project_delete' project.id %}"
+              class="icon-btn delete"
+            >
+              <i class="bi bi-trash3-fill"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
 </div>
-
 {% endblock %}

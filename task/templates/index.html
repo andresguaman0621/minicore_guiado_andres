@@ -1,53 +1,140 @@
-{% extends 'layout.html' %}
-
-{% block body %}
+{% extends 'layout.html' %} {% block body %}
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  .form-container {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .input-group {
+    display: flex;
+    flex-direction: column;
+  }
+  .input-group label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  .input-group input {
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+  }
+  .btn-submit {
+    grid-column: 1 / -1;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .btn-submit:hover {
+    background-color: #0056b3;
+  }
+  .table-container {
+    overflow-x: auto;
+  }
+  .fancy-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+  .fancy-table th,
+  .fancy-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+  }
+  .fancy-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+  }
+  .fancy-table tr:nth-child(even) {
+    background-color: #f8f9fa;
+  }
+  .fancy-table tr:hover {
+    background-color: #e9ecef;
+  }
+  @media (max-width: 768px) {
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
 
 <div class="container">
-    <form action="{% url 'index' %}" method="post">
-        {% csrf_token %}
-        <div class="input-group mb-3">
-            <span class="input-group-text">Fecha de inicio</span>
-            <input type="date" aria-label="First name" class="form-control" name="date_start" value="{{ date_start }}">
-        </div>
-    
-        <div class="input-group mb-3">
-            <span class="input-group-text">Fecha de fin</span>
-            <input type="date" aria-label="First name" class="form-control" name="date_end" value="{{ date_end }}">
-        </div>
-    
-        <button type="submit" class="btn btn-primary">Buscar</button>
+  <div class="form-container">
+    <form action="{% url 'index' %}" method="post" class="form-grid">
+      {% csrf_token %}
+      <div class="input-group">
+        <label for="date_start">Fecha de inicio</label>
+        <input
+          type="date"
+          id="date_start"
+          name="date_start"
+          value="{{ date_start }}"
+          required
+        />
+      </div>
+      <div class="input-group">
+        <label for="date_end">Fecha de fin</label>
+        <input
+          type="date"
+          id="date_end"
+          name="date_end"
+          value="{{ date_end }}"
+          required
+        />
+      </div>
+      <button type="submit" class="btn-submit">Buscar</button>
     </form>
+  </div>
 
-    {% if task_in_process_date %}
-    <h1>Tareas en proceso</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Empleado</th>
-                <th scope="col">Proyecto</th>
-                <th scope="col">Descripción</th>
-                <th scope="col">Fecha de inicio</th>
-                <th scope="col">Fecha de fin</th>
-                <th scope="col">Días de demora</th>
-                <th scope="col">Estatus</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for task in task_in_process_date %}
-            <tr>
-                <td>{{ task.id_employee.first_name }} {{ task.id_employee.last_name }}</td>
-                <td>{{ task.id_project.name }}</td>
-                <td>{{ task.description }}</td>
-                <td>{{ task.date_start }}</td>
-                <td>{{ task.date_end }}</td>
-                <td>{{ task.delay }} días de demora</td>
-                <td>{{ task.status }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+  {% if task_in_process_date %}
+  <h1>Tareas en proceso</h1>
+  <div class="table-container">
+    <table class="fancy-table">
+      <thead>
+        <tr>
+          <th>Empleado</th>
+          <th>Proyecto</th>
+          <th>Descripción</th>
+          <th>Fecha de inicio</th>
+          <th>Fecha de fin</th>
+          <th>Días de demora</th>
+          <th>Estatus</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for task in task_in_process_date %}
+        <tr>
+          <td>
+            {{ task.id_employee.first_name }} {{ task.id_employee.last_name }}
+          </td>
+          <td>{{ task.id_project.name }}</td>
+          <td>{{ task.description }}</td>
+          <td>{{ task.date_start }}</td>
+          <td>{{ task.date_end }}</td>
+          <td>{{ task.delay }} días de demora</td>
+          <td>{{ task.status }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
+  {% endif %}
 </div>
-
-{% endif %}
-
 {% endblock %}

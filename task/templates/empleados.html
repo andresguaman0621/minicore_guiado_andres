@@ -1,80 +1,252 @@
-{% extends 'layout.html' %}
-
-{% block body %}
+{% extends 'layout.html' %} {% block body %}
+<style>
+  :root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --background-color: #ecf0f1;
+    --text-color: #34495e;
+  }
+  body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: "Arial", sans-serif;
+  }
+  .container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  .btn-add-employee {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 2rem;
+    display: inline-block;
+  }
+  .btn-add-employee:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .modal-content {
+    border-radius: 10px;
+    border: none;
+  }
+  .modal-header {
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 10px 10px 0 0;
+    padding: 1.5rem;
+  }
+  .modal-body {
+    padding: 2rem;
+  }
+  .modal-footer {
+    border-top: none;
+    padding: 1.5rem;
+  }
+  .input-group {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .input-group-text {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    border-radius: 50px 0 0 50px;
+    padding: 0.75rem 1.5rem;
+  }
+  .form-control {
+    border-radius: 0 50px 50px 0;
+    border: 1px solid var(--secondary-color);
+    padding: 0.75rem 1.5rem;
+    flex: 1;
+  }
+  .btn-secondary,
+  .btn-primary {
+    border-radius: 50px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+  }
+  .btn-secondary:hover,
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .table-responsive {
+    overflow-x: auto;
+    margin-top: 2rem;
+  }
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 15px;
+    margin-bottom: 0;
+  }
+  .table th,
+  .table td {
+    padding: 1.5rem;
+    text-align: left;
+    vertical-align: middle;
+  }
+  .table thead th {
+    background-color: var(--secondary-color);
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .table tbody tr {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+  }
+  .table tbody tr:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  .icon-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+  }
+  .icon-btn:hover {
+    color: var(--accent-color);
+    transform: scale(1.2);
+  }
+  @media (max-width: 768px) {
+    .container {
+      padding: 1rem;
+    }
+    .table th,
+    .table td {
+      padding: 1rem;
+    }
+    .input-group {
+      flex-direction: column;
+    }
+    .input-group-text,
+    .form-control {
+      border-radius: 50px;
+      margin-bottom: 0.5rem;
+    }
+  }
+</style>
 
 <div class="container">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-        Agregar un empleado
-    </button>
+  <button
+    type="button"
+    class="btn-add-employee"
+    data-bs-toggle="modal"
+    data-bs-target="#exampleModal"
+  >
+    Agregar un empleado
+  </button>
 
-    <!-- Modal -->
-    <form action="{% url 'employee' %}" method="post">
-        {% csrf_token %}
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Ingresar empleado</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="input-group">
-                            <span class="input-group-text">Nombre/s y apellido/s</span>
-                            <input type="text" aria-label="First name" class="form-control" name="first_name">
-                            <input type="text" aria-label="Last name" class="form-control" name="last_name">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        <button type="submit" class="btn btn-primary">Agregar empleado</button>
-                    </div>
-                </div>
+  <!-- Modal -->
+  <form action="{% url 'employee' %}" method="post">
+    {% csrf_token %}
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Ingresar empleado
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="input-group">
+              <span class="input-group-text">Nombre</span>
+              <input
+                type="text"
+                class="form-control"
+                name="first_name"
+                required
+              />
             </div>
+            <div class="input-group">
+              <span class="input-group-text">Apellido</span>
+              <input
+                type="text"
+                class="form-control"
+                name="last_name"
+                required
+              />
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cerrar
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Agregar empleado
+            </button>
+          </div>
         </div>
-    </form>
+      </div>
+    </div>
+  </form>
 
-    <table class="table table-dark">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nombres</th>
-                <th scope="col">Apellidos</th>
-                <th scope="col">
-                    <div class="container text-center">
-                        Editar
-                    </div>
-                </th>
-                <th scope="col">
-                    <div class="container text-center">
-                        Eliminar
-                    </div>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for empleado in employee %}
-            <tr>
-                <th scope="row">{{ empleado.id }}</th>
-                <td>{{ empleado.first_name }}</td>
-                <td>{{ empleado.last_name }}</td>
-                <td>
-                    <div class="container text-center">
-                        <a href="{% url 'employee_edit' empleado.id %}" style="color: white; text-decoration: none;">    
-                            <i class="bi bi-pen-fill"></i>
-                        </a>
-                    </div>
-                </td>
-                <td>
-                    <div class="container text-center">
-                        <a href="{% url 'employee_delete' empleado.id %}" style="color: white; text-decoration: none;">    
-                            <i class="bi bi-trash3-fill"></i>
-                        </a>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nombres</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col" class="text-center">Editar</th>
+          <th scope="col" class="text-center">Eliminar</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for empleado in employee %}
+        <tr>
+          <th scope="row">{{ empleado.id }}</th>
+          <td>{{ empleado.first_name }}</td>
+          <td>{{ empleado.last_name }}</td>
+          <td class="text-center">
+            <a href="{% url 'employee_edit' empleado.id %}" class="icon-btn">
+              <i class="bi bi-pen-fill"></i>
+            </a>
+          </td>
+          <td class="text-center">
+            <a href="{% url 'employee_delete' empleado.id %}" class="icon-btn">
+              <i class="bi bi-trash3-fill"></i>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
+  </div>
 </div>
-
 {% endblock %}
